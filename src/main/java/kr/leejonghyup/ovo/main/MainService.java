@@ -8,8 +8,8 @@ import java.util.List;
 @org.springframework.stereotype.Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class Service {
-    private final Repository repository;
+public class MainService {
+    private final MainRepository repository;
 
     public List<Test> getList() {
 

@@ -8,16 +8,16 @@ import java.util.List;
 
 @org.springframework.stereotype.Controller
 @RequiredArgsConstructor
-public class Controller {
+public class MainController {
 
-    private final Service service;
+    private final MainService service;
 
-    @GetMapping("/helloworld")
-    public String helloworld(Model model) {
+    @GetMapping("/main")
+    public String main(Model model) {
 
         List<Test> getList = service.getList();
 
         model.addAttribute("name", getList.get(0).getName());
-        return "helloworld";
+        return "main";
     }
 }

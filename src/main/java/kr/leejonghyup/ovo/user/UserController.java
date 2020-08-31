@@ -38,7 +38,7 @@ public class UserController {
         if (user.size() > 0) {
             if (password.equals(user.get(0).getPassword())) {
                 session.setAttribute("login_YN", "Y");
-                out.println("<script>location.href = './helloworld' </script>");
+                out.println("<script>location.href = './main' </script>");
             } else {
                 out.println("<script>alert('아이디&비밀번호를 확인해주세요.'); location.href = './login' </script>");
             }
@@ -68,7 +68,6 @@ public class UserController {
             return "Y";
         }
     }
-
 
     @RequestMapping("/insertUserInfo")
     public String insertUserInfo(HttpServletRequest req) {

@@ -9,7 +9,7 @@ import java.util.List;
 
 @org.springframework.stereotype.Repository
 @RequiredArgsConstructor
-public class Repository {
+public class MainRepository {
     private final EntityManager em;
 
     public List<Test> getList() {
