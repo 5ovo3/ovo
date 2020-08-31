@@ -21,7 +21,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/login")
+    @GetMapping(value = {"/", "/login"})
     public String login() {
         return "login";
     }
