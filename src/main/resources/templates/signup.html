@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+</head>
+<body>
+<div class="container">
+    <br>
+    <div class="card bg-light">
+        <article class="card-body mx-auto" style="max-width: 400px;">
+            <h4 class="card-title mt-3 text-center">회원가입</h4>
+            <form id="saveForm" action="./insertUserInfo" method="post">
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+                    </div>
+                    <input id="email" name="email" class="form-control" placeholder="아이디 (이메일)" type="email">
+                    <div class="input-group-append">
+                        <span id="emailCheck" class="input-group-text"><i class="fa fa-check"></i></span>
+                    </div>
+                </div>
+
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                    </div>
+                    <input id="password" name="password" class="form-control" placeholder="비밀번호" type="password">
+                </div>
+
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                    </div>
+                    <input id="passwordConfirm" class="form-control" placeholder="비밀번호 확인" type="password">
+                </div>
+
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                    </div>
+                    <input id="name" name="name" class="form-control" placeholder="이름" type="text">
+                </div>
+
+                <div class="form-group input-group" style="display: none">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
+                    </div>
+                    <select class="custom-select" style="max-width: 120px;">
+                        <option selected="">010</option>
+                    </select>
+                    <input id="tel" name="tel" class="form-control" placeholder="전화번호" type="text">
+                </div>
+
+                <div class="form-group">
+                    <button id="saveButton" class="btn btn-primary btn-block"> 가입</button>
+                </div>
+                <p class="text-center">계정이 있으세요??? <a href="./login">Log In</a></p>
+            </form>
+        </article>
+    </div> <!-- card.// -->
+
+</div>
+<!--container end.//-->
+</body>
+<script src="./js/jquery-1.12.4.min.js"></script>
+<script src="./js/bootstrap.min.js"></script>
+<script src="./js/common.js"></script>
+<script>
+
+    let emailValid = false;
+    let pwValid = false;
+
+    $("#email").on("keyup", function () {
+        if (emailValidation($("#email").val())) {
+            $("#email").attr("class", "form-control");
+        } else {
+            $("#email").addClass("is-invalid");
+            $(this).trigger("focus");
+            return false;
+        }
+    });
+
+    $("#emailCheck").on("click", function () {
+        let email = $("#email").val();
+
+        if (email === "" || $("#email").hasClass("is-invalid")) {
+            alert("이메일을 확인해 주세요.");
+        } else {
+            $.ajax({
+                url: "./emailCheck",
+                method: "post",
+                data: {email: email}
+            }).done(function (result) {
+                if(result == "Y"){
+                    $("#email").addClass("is-valid").attr("readonly", true);
+                    $(".input-group-append").hide();
+
+                    emailValid = true;
+                } else {
+                    alert("중복된 이메일 입니다.");
+                    $("#email").addClass("is-invalid").trigger("focus");
+                }
+            });
+        }
+    });
+
+    $("#password, #passwordConfirm").on("keyup", function () {
+        let password = $("#password").val();
+        let passwordConfirm = $("#passwordConfirm").val();
+        if (password !== "" && passwordConfirm !== "") {
+            if (password === passwordConfirm) {
+                $("#password").addClass("is-valid").removeClass("is-invalid");
+                $("#passwordConfirm").addClass("is-valid").removeClass("is-invalid");
+                pwValid = true;
+            } else if (password !== passwordConfirm) {
+                $("#password").addClass("is-invalid").removeClass("is-valid");
+                $("#passwordConfirm").addClass("is-invalid").removeClass("is-valid");
+                pwValid = false;
+            }
+        }
+    });
+
+    $("#saveButton").on("click", function () {
+        if (!emailValid) {
+            alert("이메일을 확인해 주세요.");
+            $("#email").trigger("focus");
+            return false;
+        }
+        if (!pwValid) {
+            alert("비밀번호를 확인해 주세요.");
+            $("#password").trigger("focus");
+            return false;
+        }
+        if ($("#name").val() === "") {
+            alert("이름을 확인해 주세요");
+            $("#name").trigger("focus");
+            return false;
+        }
+        // if ($("#tel").val() === "") {
+        //     alert();
+        //     $("#tel").trigger("focus");
+        //     return false;
+        // }
+
+        $("#saveForm").trigger("submit");
+    });
+</script>
+</html>
