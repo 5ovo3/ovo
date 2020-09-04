@@ -38,6 +38,7 @@ public class UserController {
         if (user.size() > 0) {
             if (password.equals(user.get(0).getPassword())) {
                 session.setAttribute("login_YN", "Y");
+                session.setAttribute("user_name", user.get(0).getName());
                 out.println("<script>location.href = './main' </script>");
             } else {
                 out.println("<script>alert('아이디&비밀번호를 확인해주세요.'); location.href = './login' </script>");
@@ -46,6 +47,12 @@ public class UserController {
             out.println("<script>alert('아이디&비밀번호를 확인해주세요.'); location.href = './login' </script>");
         }
         out.flush();
+    }
+
+    @GetMapping(value = "/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
     }
 
 
